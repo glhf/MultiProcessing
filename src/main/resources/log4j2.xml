@@ -9,7 +9,7 @@
 
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern> [%d{ABSOLUTE}] %msg%n</Pattern>
+                <Pattern> [%d{ABSOLUTE}] [%t] %msg%n</Pattern>
             </PatternLayout>
         </Console>
 
