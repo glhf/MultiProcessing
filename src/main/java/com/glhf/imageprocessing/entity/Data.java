@@ -1,4 +1,4 @@
-package com.glhf.multiprocessing;
+package com.glhf.imageprocessing.entity;
 
 import java.awt.*;
 
