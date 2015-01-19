@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
@@ -35,36 +37,35 @@ public class ClerkForkJoin {
     public void computeImage() {
         //out.setRGB(i, j, new Data(i, j, new Color(img.getRGB(i, j))).getGray().getRGB())l
         long start = System.currentTimeMillis();
-        Data[] datas = new Data[inImage.getHeight() * inImage.getWidth()];
-        int k = 0;
-        for (int i = 0; i < inImage.getWidth(); i++) {
-            for (int j = 0; j < inImage.getHeight(); j++) {
-                datas[k] = new Data(i, j, inImage.getRGB(i, j));
-                k++;
-            }
-        }
+        int[] datas = inImage.getRGB(inImage.getMinX(), inImage.getMinY(), inImage.getWidth(), inImage.getHeight(), null, 0, inImage.getWidth()); //new int[inImage.getHeight() * inImage.getWidth()];
+
         System.out.println("Fork/Join array data init " + ((System.currentTimeMillis() - start)));
+
         Worker worker = new Worker(outImage, datas, datas.length / Runtime.getRuntime().availableProcessors() * 16);
         ForkJoinPool pool = new ForkJoinPool();
         pool.invoke(worker);
 
+        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), datas, 0, inImage.getWidth());
     }
 
     class Worker extends RecursiveAction {
         protected int THRESHOLD;
 
         private BufferedImage outImage;
-        private Data[] datas;
+        private int[] datas;
 
-        Worker(BufferedImage outImage, Data[] datas, int length) {
+        Worker(BufferedImage outImage, int[] datas, int length) {
             this.outImage = outImage;
             this.datas = datas;
             this.THRESHOLD = length;
         }
 
         private void computeDirectly() {
+            Data tmp = new Data();
             long start = System.currentTimeMillis();
-            Arrays.asList(this.datas).forEach(el -> outImage.setRGB(el.getX(), el.getY(), el.getGray()));
+            for (int i = 0; i < this.datas.length; i++) {
+                this.datas[i] = tmp.getGray(this.datas[i]);
+            }
             System.out.println("Fork/Join array.aslist " + ((System.currentTimeMillis() - start)));
         }
 
@@ -74,8 +75,8 @@ public class ClerkForkJoin {
                 computeDirectly();
             } else {
                 int split = datas.length / 2;
-                Data[] d1 = new Data[split];
-                Data[] d2 = new Data[split];
+                int[] d1 = new int[split];
+                int[] d2 = new int[split];
                 System.arraycopy(datas, 0, d1, 0, d1.length);
                 System.arraycopy(datas, d1.length, d2, 0, d2.length);
                 invokeAll(new Worker(this.outImage, d1, THRESHOLD), new Worker(this.outImage, d2, THRESHOLD));

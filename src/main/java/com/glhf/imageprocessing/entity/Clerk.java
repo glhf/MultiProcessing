@@ -37,10 +37,11 @@ public class Clerk {
         List<Point> list = getBounds(this.img.getHeight(), this.countOfTasks);
         list.forEach(el -> tasks.add(new Thread("thread #" + tasks.size()) {
             public void run() {
+                Data tmp = new Data();
                 LOG.debug("start thread " + el.x + " " + el.y + " " + img.getWidth());
                 for (int i = 0; i < img.getWidth(); i++) {
                     for (int j = el.x - 1; j < el.y; j++) {
-                        out.setRGB(i, j, img.getRGB(i, j));
+                        out.setRGB(i, j, tmp.getGray(img.getRGB(i, j)));
                     }
                 }
                 LOG.debug("finished thread!");
