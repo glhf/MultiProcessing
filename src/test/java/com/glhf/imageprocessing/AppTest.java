@@ -16,11 +16,10 @@ import java.net.URL;
  */
 public class AppTest {
 
-    @Ignore
     @Test
     public void testBaseImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineBaseThreadImplementation eng = new ImageEngineBaseThreadImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        ImageEngineBaseThreadImplementation eng = new ImageEngineBaseThreadImplementation(inputFullPath.toString(), "base", OutputType.PNG);
         eng.read();
         long start = System.currentTimeMillis();
         eng.convert();
@@ -28,11 +27,10 @@ public class AppTest {
         eng.write();
     }
 
-    @Ignore
     @Test
     public void testPoolImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineThreadPoolImplementation eng = new ImageEngineThreadPoolImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        ImageEngineThreadPoolImplementation eng = new ImageEngineThreadPoolImplementation(inputFullPath.toString(), "pool", OutputType.JPG);
         eng.read();
         long start = System.currentTimeMillis();
         eng.convert();
@@ -44,7 +42,7 @@ public class AppTest {
     @Test
     public void testForkJoinImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineForkJoinImplementation eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        ImageEngineForkJoinImplementation eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "join", OutputType.BMP);
         eng.read();
         long start = System.currentTimeMillis();
         eng.convert();

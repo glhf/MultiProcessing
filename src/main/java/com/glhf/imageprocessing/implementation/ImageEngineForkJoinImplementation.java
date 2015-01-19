@@ -82,7 +82,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     @Override
     public void write() {
         try {
-            File output = new File(new StringBuffer().append(this.outputPath).append("FORKJOIN.").append(outputType.toString()).toString());
+            File output = new File(new StringBuffer().append(this.outputPath).append("FKJN.").append(outputType.toString()).toString());
             LOG.debug(output.getAbsolutePath());
             ImageIO.write(this.outImage, outputType.toString(), output);
         } catch (IOException e) {

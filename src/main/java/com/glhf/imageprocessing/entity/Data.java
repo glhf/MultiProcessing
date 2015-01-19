@@ -43,6 +43,6 @@ public class Data {
     }
 
     public static int getGray(int rgb) {
-        return (int) (((rgb >> 16) & 0x00ff0000) * 0.299 + ((rgb >> 8) & 0x0000ff00) * 0.587 + ((rgb) & 0x000000ff) * 0.114);
+        return (int) (((rgb >> 16) & 0xff0000) * 0.299 + ((rgb >> 8) & 0x0000ff00) * 0.587 + ((rgb) & 0x000000ff) * 0.114);
     }
 }
