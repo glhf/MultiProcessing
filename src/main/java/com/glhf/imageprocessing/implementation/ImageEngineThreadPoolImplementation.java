@@ -66,7 +66,7 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
 
     @Override
     public void convert() {
-        Clerk clerk = new Clerk(this.inImage, this.outImage, 2);
+        Clerk clerk = new Clerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
 
         ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         clerk.getTaskList().forEach(el -> exe.execute(el));

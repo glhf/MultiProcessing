@@ -6,6 +6,7 @@ import com.glhf.imageprocessing.implementation.ImageEngineBaseThreadImplementati
 import com.glhf.imageprocessing.implementation.ImageEngineForkJoinImplementation;
 import com.glhf.imageprocessing.implementation.ImageEngineThreadPoolImplementation;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URL;
@@ -34,7 +35,7 @@ public class AppTest {
         eng.convert();
         System.out.println("Pool " + ((System.currentTimeMillis() - start)));
     }
-
+    @Ignore
     @Test
     public void testForkJoinImoplementation() {
         long start = System.currentTimeMillis();
