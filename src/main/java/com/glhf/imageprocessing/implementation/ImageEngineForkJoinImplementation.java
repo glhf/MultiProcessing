@@ -1,6 +1,7 @@
 package com.glhf.imageprocessing.implementation;
 
 import com.glhf.imageprocessing.entity.Clerk;
+import com.glhf.imageprocessing.entity.ClerkForkJoin;
 import com.glhf.imageprocessing.entity.OutputType;
 import com.glhf.imageprocessing.interfaces.ImageEngine;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Convert file with input image-file with path as argument
@@ -62,26 +65,15 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
 
     @Override
     public void convert() {
-        Clerk clerk = new Clerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
-        List<Thread> tasks = clerk.getTaskList();
-        tasks.forEach(el -> el.start());
-
-        tasks.forEach(el -> {
-            try {
-                el.join();
-            } catch (InterruptedException e) {
-                LOG.error("Threads error ", e);
-            }
-        });
-
-        LOG.debug("wait main fin");
+        ClerkForkJoin clerk = new ClerkForkJoin(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
+        clerk.computeImage();
         this.write();
     }
 
     @Override
     public void write() {
         try {
-            File output = new File(new StringBuffer().append(this.outputPath).append(".").append(outputType.toString()).toString());
+            File output = new File(new StringBuffer().append(this.outputPath).append("FORKJOIN.").append(outputType.toString()).toString());
             LOG.debug(output.getAbsolutePath());
             ImageIO.write(this.outImage, outputType.toString(), output);
         } catch (IOException e) {
