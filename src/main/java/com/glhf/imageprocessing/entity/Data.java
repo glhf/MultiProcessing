@@ -12,30 +12,37 @@ import java.awt.*;
  */
 public class Data {
 
-    Point point = new Point(0, 0);
-    Color color;
+    private int x = 0;
+    private int y = 0;
+    private int color;
 
-    public Data(int x, int y, Color color) {
-        this.point.setLocation(x, y);
-        this.color = color;
+    public Data() {
+
     }
 
-    public Data(Color color) {
-        this.color = color;
+    public Data(int x, int y, int colorRGB) {
+        this.x = x;
+        this.y = y;
+        this.color = colorRGB;
+    }
+
+    public Data(int colorRGB) {
+        this.color = colorRGB;
     }
 
     public int getX() {
-        return (int) this.point.getX();
+        return this.x;
     }
 
     public int getY() {
-        return (int) this.point.getY();
+        return this.y;
     }
 
-    public Color getGray() {
-        int red = (int) (this.color.getRed() * 0.299);
-        int green = (int) (this.color.getGreen() * 0.587);
-        int blue = (int) (this.color.getBlue() * 0.114);
-        return new Color(red + green + blue, red + green + blue, red + green + blue);
+    public int getGray() {
+        return (int) (((this.color >> 16) & 0x00ff0000) * 0.299 + ((this.color >> 8) & 0x0000ff00) * 0.587 + ((this.color) & 0x000000ff) * 0.114);
+    }
+
+    public static int getGray(int rgb) {
+        return (int) (((rgb >> 16) & 0x00ff0000) * 0.299 + ((rgb >> 8) & 0x0000ff00) * 0.587 + ((rgb) & 0x000000ff) * 0.114);
     }
 }

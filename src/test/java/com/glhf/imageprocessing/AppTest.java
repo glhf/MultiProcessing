@@ -16,32 +16,39 @@ import java.net.URL;
  */
 public class AppTest {
 
-    @Test
-    public void testBaseImoplementation() {
-        long start = System.currentTimeMillis();
-
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineBaseThreadImplementation eng = new ImageEngineBaseThreadImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
-        eng.convert();
-
-        System.out.println("Base " + ((System.currentTimeMillis() - start)));
-    }
-
-    @Test
-    public void testPoolImoplementation() {
-        long start = System.currentTimeMillis();
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineThreadPoolImplementation eng = new ImageEngineThreadPoolImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
-        eng.convert();
-        System.out.println("Pool " + ((System.currentTimeMillis() - start)));
-    }
     @Ignore
     @Test
-    public void testForkJoinImoplementation() {
+    public void testBaseImoplementation() {
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
+        ImageEngineBaseThreadImplementation eng = new ImageEngineBaseThreadImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        eng.read();
         long start = System.currentTimeMillis();
+        eng.convert();
+        System.out.println("Base " + ((System.currentTimeMillis() - start)));
+        eng.write();
+    }
+
+    @Ignore
+    @Test
+    public void testPoolImoplementation() {
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
+        ImageEngineThreadPoolImplementation eng = new ImageEngineThreadPoolImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        eng.read();
+        long start = System.currentTimeMillis();
+        eng.convert();
+        System.out.println("Pool " + ((System.currentTimeMillis() - start)));
+        eng.write();
+    }
+
+
+    @Test
+    public void testForkJoinImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
         ImageEngineForkJoinImplementation eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "grayscale", OutputType.JPG);
+        eng.read();
+        long start = System.currentTimeMillis();
         eng.convert();
         System.out.println("Fork/Join " + ((System.currentTimeMillis() - start)));
+        eng.write();
     }
 }

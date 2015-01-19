@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class ImageEngineThreadPoolImplementation implements ImageEngine {
     private static final Logger LOG = LogManager.getLogger(ImageEngineThreadPoolImplementation.class);
 
+    private String inputPath;
     private String outputPath;
     private OutputType outputType = OutputType.JPG;
     private BufferedImage inImage;
@@ -39,14 +40,12 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
     }
 
     public ImageEngineThreadPoolImplementation(String inputPath, String outputPath) {
-        this.read(inputPath);
-        this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.inputPath = inputPath;
         this.outputPath = outputPath;
     }
 
     public ImageEngineThreadPoolImplementation(String inputPath, String outputPath, OutputType type) {
-        this.read(inputPath);
-        this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
     }
@@ -57,6 +56,20 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(path);
             this.inImage = ImageIO.read(pathURL);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        } catch (MalformedInputException e) {
+            LOG.error("Invalid path!", e);
+        } catch (IOException e) {
+            LOG.error("Image load error ", e);
+        }
+    }
+
+    @Override
+    public void read() {
+        try {
+            URL pathURL = new URL(this.inputPath);
+            this.inImage = ImageIO.read(pathURL);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
         } catch (IOException e) {
@@ -83,7 +96,7 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
     @Override
     public void write() {
         try {
-            File output = new File(new StringBuffer().append(this.outputPath).append(".").append(outputType.toString()).toString());
+            File output = new File(new StringBuffer().append(this.outputPath).append("TPE.").append(outputType.toString()).toString());
             LOG.debug(output.getAbsolutePath());
             ImageIO.write(this.outImage, outputType.toString(), output);
         } catch (IOException e) {

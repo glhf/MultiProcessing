@@ -13,9 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Convert file with input image-file with path as argument
@@ -30,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class ImageEngineForkJoinImplementation implements ImageEngine {
     private static final Logger LOG = LogManager.getLogger(ImageEngineBaseThreadImplementation.class);
 
+    private String inputPath;
     private String outputPath;
     private OutputType outputType = OutputType.JPG;
     private BufferedImage inImage;
@@ -39,14 +37,12 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     }
 
     public ImageEngineForkJoinImplementation(String inputPath, String outputPath) {
-        this.read(inputPath);
-        this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.inputPath = inputPath;
         this.outputPath = outputPath;
     }
 
     public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OutputType type) {
-        this.read(inputPath);
-        this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
     }
@@ -56,6 +52,20 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(path);
             this.inImage = ImageIO.read(pathURL);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+        } catch (MalformedInputException e) {
+            LOG.error("Invalid path!", e);
+        } catch (IOException e) {
+            LOG.error("Image load error ", e);
+        }
+    }
+
+    @Override
+    public void read() {
+        try {
+            URL pathURL = new URL(this.inputPath);
+            this.inImage = ImageIO.read(pathURL);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
         } catch (IOException e) {
@@ -67,7 +77,6 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     public void convert() {
         ClerkForkJoin clerk = new ClerkForkJoin(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
         clerk.computeImage();
-        this.write();
     }
 
     @Override

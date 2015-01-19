@@ -16,6 +16,8 @@ public interface ImageEngine {
      */
     public void read(String path);
 
+    public void read();
+
     /**
      * Method that must do some calculating with image
      */

@@ -39,7 +39,7 @@ public class ClerkForkJoin {
         int k = 0;
         for (int i = 0; i < inImage.getWidth(); i++) {
             for (int j = 0; j < inImage.getHeight(); j++) {
-                datas[k] = new Data(i, j, new Color(inImage.getRGB(i, j)));
+                datas[k] = new Data(i, j, inImage.getRGB(i, j));
                 k++;
             }
         }
@@ -64,7 +64,7 @@ public class ClerkForkJoin {
 
         private void computeDirectly() {
             long start = System.currentTimeMillis();
-            Arrays.asList(this.datas).forEach(el -> outImage.setRGB(el.getX(), el.getY(), el.getGray().getRGB()));
+            Arrays.asList(this.datas).forEach(el -> outImage.setRGB(el.getX(), el.getY(), el.getGray()));
             System.out.println("Fork/Join array.aslist " + ((System.currentTimeMillis() - start)));
         }
 

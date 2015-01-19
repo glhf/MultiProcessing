@@ -40,7 +40,7 @@ public class Clerk {
                 LOG.debug("start thread " + el.x + " " + el.y + " " + img.getWidth());
                 for (int i = 0; i < img.getWidth(); i++) {
                     for (int j = el.x - 1; j < el.y; j++) {
-                        out.setRGB(i, j, new Data(i, j, new Color(img.getRGB(i, j))).getGray().getRGB());
+                        out.setRGB(i, j, img.getRGB(i, j));
                     }
                 }
                 LOG.debug("finished thread!");
