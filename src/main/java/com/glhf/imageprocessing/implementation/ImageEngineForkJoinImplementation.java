@@ -52,6 +52,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(path);
             this.inImage = ImageIO.read(pathURL);
+
             this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
@@ -65,6 +66,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(this.inputPath);
             this.inImage = ImageIO.read(pathURL);
+            System.out.println(inImage.getType());
             this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
