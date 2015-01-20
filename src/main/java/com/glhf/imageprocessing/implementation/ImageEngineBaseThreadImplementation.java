@@ -1,8 +1,10 @@
 package com.glhf.imageprocessing.implementation;
 
-import com.glhf.imageprocessing.entity.Clerk;
+import com.glhf.imageprocessing.clerks.ThreadPoolClerk;
 import com.glhf.imageprocessing.entity.OutputType;
+import com.glhf.imageprocessing.interfaces.Clerkable;
 import com.glhf.imageprocessing.interfaces.ImageEngine;
+import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,19 +28,22 @@ public class ImageEngineBaseThreadImplementation implements ImageEngine {
     private OutputType outputType = OutputType.JPG;
     private BufferedImage inImage;
     private BufferedImage outImage;
+    private OnePixelDependFilter filter;
 
     public ImageEngineBaseThreadImplementation() {
     }
 
-    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath) {
+    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
+        this.filter = filter;
     }
 
-    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath, OutputType type) {
+    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath, OutputType type, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
+        this.filter = filter;
     }
 
     @Override
@@ -56,31 +61,14 @@ public class ImageEngineBaseThreadImplementation implements ImageEngine {
 
     @Override
     public void read() {
-        try {
-            URL pathURL = new URL(this.inputPath);
-            this.inImage = ImageIO.read(pathURL);
-            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-        } catch (MalformedInputException e) {
-            LOG.error("Invalid path!", e);
-        } catch (IOException e) {
-            LOG.error("Image load error ", e);
-        }
+        read(this.inputPath);
     }
 
     @Override
     public void convert() {
-        Clerk clerk = new Clerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
-        List<Thread> tasks = clerk.getTaskList();
-        tasks.forEach(el -> el.start());
-
-        tasks.forEach(el -> {
-            try {
-                el.join();
-            } catch (InterruptedException e) {
-                LOG.error("Threads error ", e);
-            }
-        });
-        this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
+        Clerkable clerk = new ThreadPoolClerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors(), filter);
+        clerk.computeImage();
+        this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getPixelsArray(), 0, inImage.getWidth());
         LOG.debug("wait main fin");
     }
 

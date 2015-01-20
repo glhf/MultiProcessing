@@ -1,9 +1,10 @@
 package com.glhf.imageprocessing.implementation;
 
-import com.glhf.imageprocessing.entity.Clerk;
-import com.glhf.imageprocessing.entity.ClerkForkJoin;
+import com.glhf.imageprocessing.clerks.ForkJoinClerk;
 import com.glhf.imageprocessing.entity.OutputType;
+import com.glhf.imageprocessing.interfaces.Clerkable;
 import com.glhf.imageprocessing.interfaces.ImageEngine;
+import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,19 +32,22 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     private OutputType outputType = OutputType.PNG;
     private BufferedImage inImage;
     private BufferedImage outImage;
+    private OnePixelDependFilter filter;
 
     public ImageEngineForkJoinImplementation() {
     }
 
-    public ImageEngineForkJoinImplementation(String inputPath, String outputPath) {
+    public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
+        this.filter = filter;
     }
 
-    public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OutputType type) {
+    public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OutputType type, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
+        this.filter = filter;
     }
 
     @Override
@@ -61,22 +65,14 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
 
     @Override
     public void read() {
-        try {
-            URL pathURL = new URL(this.inputPath);
-            this.inImage = ImageIO.read(pathURL);
-            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-        } catch (MalformedInputException e) {
-            LOG.error("Invalid path!", e);
-        } catch (IOException e) {
-            LOG.error("Image load error ", e);
-        }
+        read(this.inputPath);
     }
 
     @Override
     public void convert() {
-        ClerkForkJoin clerk = new ClerkForkJoin(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
+        Clerkable clerk = new ForkJoinClerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors(), filter);
         clerk.computeImage();
-        this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
+        this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getPixelsArray(), 0, inImage.getWidth());
     }
 
     @Override

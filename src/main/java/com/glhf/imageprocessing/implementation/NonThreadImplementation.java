@@ -1,10 +1,8 @@
 package com.glhf.imageprocessing.implementation;
 
-import com.glhf.imageprocessing.clerks.ThreadPoolClerk;
+import com.glhf.imageprocessing.clerks.NonThreadClerk;
 import com.glhf.imageprocessing.entity.OutputType;
-import com.glhf.imageprocessing.interfaces.Clerkable;
 import com.glhf.imageprocessing.interfaces.ImageEngine;
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,40 +14,35 @@ import java.net.URL;
 import java.nio.charset.MalformedInputException;
 
 /**
- * Convert file with input image-file with path as argument
- * to gray scale image file
- * Implementation multithreading with pools of threads
+ * Created by
  *
  * @author goodvin Mykola Polonskyi
- *         on 16.01.15
+ *         on 20.01.15
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public class ImageEngineThreadPoolImplementation implements ImageEngine {
+public class NonThreadImplementation implements ImageEngine {
     private static final Logger LOG = LogManager.getLogger(ImageEngineThreadPoolImplementation.class);
 
-    private String outputPath;
     private String inputPath;
+    private String outputPath;
     private OutputType outputType = OutputType.JPG;
     private BufferedImage inImage;
     private BufferedImage outImage;
-    private OnePixelDependFilter filter;
 
 
-    public ImageEngineThreadPoolImplementation() {
+    public NonThreadImplementation() {
     }
 
-    public ImageEngineThreadPoolImplementation(String inputPath, String outputPath, OnePixelDependFilter filter) {
+    public NonThreadImplementation(String inputPath, String outputPath) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
-        this.filter = filter;
     }
 
-    public ImageEngineThreadPoolImplementation(String inputPath, String outputPath, OutputType type, OnePixelDependFilter filter) {
+    public NonThreadImplementation(String inputPath, String outputPath, OutputType type) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
-        this.filter = filter;
     }
 
 
@@ -74,7 +67,7 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
 
     @Override
     public void convert() {
-        Clerkable clerk = new ThreadPoolClerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors(), filter);
+        NonThreadClerk clerk = new NonThreadClerk(inImage, outImage);
         clerk.computeImage();
         this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getPixelsArray(), 0, inImage.getWidth());
     }
