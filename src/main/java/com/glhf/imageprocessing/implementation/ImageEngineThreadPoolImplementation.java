@@ -89,7 +89,7 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
         } catch (InterruptedException e) {
             LOG.info(e);
         }
-        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
+        this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
     }
 
     @Override
