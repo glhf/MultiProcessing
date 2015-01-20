@@ -89,7 +89,6 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
             LOG.info(e);
         }
         outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
-
     }
 
     @Override
@@ -102,7 +101,6 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
             LOG.error("Image save error ", e);
         }
     }
-
 
     public void setOutputType(OutputType outputType) {
         this.outputType = outputType;

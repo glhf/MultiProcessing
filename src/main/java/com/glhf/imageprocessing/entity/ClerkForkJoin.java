@@ -24,34 +24,34 @@ public class ClerkForkJoin {
 
     private BufferedImage inImage;
     private BufferedImage outImage;
-
+    int[] datas;
 
     public ClerkForkJoin(BufferedImage in, BufferedImage out, int countOfTasks) {
         this.inImage = in;
         this.outImage = out;
+        this.datas = inImage.getRGB(inImage.getMinX(), inImage.getMinY(), inImage.getWidth(), inImage.getHeight(), null, 0, inImage.getWidth()); //new int[inImage.getHeight() * inImage.getWidth()];
+
     }
 
     /**
      * divide indexes of image for calculating with n process
      */
     public void computeImage() {
-        int[] datas = inImage.getRGB(inImage.getMinX(), inImage.getMinY(), inImage.getWidth(), inImage.getHeight(), null, 0, inImage.getWidth()); //new int[inImage.getHeight() * inImage.getWidth()];
-
-        Worker worker = new Worker(outImage, datas, datas.length / Runtime.getRuntime().availableProcessors() * 16);
+        Worker worker = new Worker(datas, datas.length / Runtime.getRuntime().availableProcessors() * 16);
         ForkJoinPool pool = new ForkJoinPool();
         pool.invoke(worker);
+    }
 
-        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), datas, 0, inImage.getWidth());
+    public int[] getDatas() {
+        return datas;
     }
 
     class Worker extends RecursiveAction {
         protected int THRESHOLD;
 
-        private BufferedImage outImage;
         private int[] datas;
 
-        Worker(BufferedImage outImage, int[] datas, int length) {
-            this.outImage = outImage;
+        Worker(int[] datas, int length) {
             this.datas = datas;
             this.THRESHOLD = length;
         }
@@ -73,7 +73,7 @@ public class ClerkForkJoin {
                 int[] d2 = new int[split];
                 System.arraycopy(datas, 0, d1, 0, d1.length);
                 System.arraycopy(datas, d1.length, d2, 0, d2.length);
-                invokeAll(new Worker(this.outImage, d1, THRESHOLD), new Worker(this.outImage, d2, THRESHOLD));
+                invokeAll(new Worker(d1, THRESHOLD), new Worker(d2, THRESHOLD));
             }
         }
     }

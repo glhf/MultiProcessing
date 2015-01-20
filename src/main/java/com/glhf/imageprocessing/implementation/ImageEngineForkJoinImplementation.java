@@ -29,7 +29,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
 
     private String inputPath;
     private String outputPath;
-    private OutputType outputType = OutputType.JPG;
+    private OutputType outputType = OutputType.PNG;
     private BufferedImage inImage;
     private BufferedImage outImage;
 
@@ -77,6 +77,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     public void convert() {
         ClerkForkJoin clerk = new ClerkForkJoin(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
         clerk.computeImage();
+        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
     }
 
     @Override
