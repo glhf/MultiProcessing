@@ -80,7 +80,7 @@ public class ImageEngineBaseThreadImplementation implements ImageEngine {
                 LOG.error("Threads error ", e);
             }
         });
-
+        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
         LOG.debug("wait main fin");
     }
 

@@ -35,11 +35,7 @@ public class ClerkForkJoin {
      * divide indexes of image for calculating with n process
      */
     public void computeImage() {
-        //out.setRGB(i, j, new Data(i, j, new Color(img.getRGB(i, j))).getGray().getRGB())l
-        long start = System.currentTimeMillis();
         int[] datas = inImage.getRGB(inImage.getMinX(), inImage.getMinY(), inImage.getWidth(), inImage.getHeight(), null, 0, inImage.getWidth()); //new int[inImage.getHeight() * inImage.getWidth()];
-
-        System.out.println("Fork/Join array data init " + ((System.currentTimeMillis() - start)));
 
         Worker worker = new Worker(outImage, datas, datas.length / Runtime.getRuntime().availableProcessors() * 16);
         ForkJoinPool pool = new ForkJoinPool();
@@ -62,11 +58,9 @@ public class ClerkForkJoin {
 
         private void computeDirectly() {
             Data tmp = new Data();
-            long start = System.currentTimeMillis();
             for (int i = 0; i < this.datas.length; i++) {
                 this.datas[i] = tmp.getGray(this.datas[i]);
             }
-            System.out.println("Fork/Join array.aslist " + ((System.currentTimeMillis() - start)));
         }
 
         @Override

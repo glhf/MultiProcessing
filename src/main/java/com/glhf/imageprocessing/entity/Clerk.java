@@ -19,14 +19,16 @@ import java.util.List;
 public class Clerk {
     private static final Logger LOG = LogManager.getLogger(Clerk.class);
 
-    final BufferedImage img;
-    final BufferedImage out;
+    final BufferedImage inImage;
+    final BufferedImage outImage;
     final int countOfTasks;
+    int[] datas;
 
-    public Clerk(BufferedImage img, BufferedImage out, int countOfTasks) {
-        this.img = img;
-        this.out = out;
+    public Clerk(BufferedImage inImage, BufferedImage outImage, int countOfTasks) {
+        this.inImage = inImage;
+        this.outImage = outImage;
         this.countOfTasks = countOfTasks;
+        this.datas = inImage.getRGB(inImage.getMinX(), inImage.getMinY(), inImage.getWidth(), inImage.getHeight(), null, 0, inImage.getWidth());
     }
 
     /**
@@ -34,15 +36,13 @@ public class Clerk {
      */
     public List<Thread> getTaskList() {
         List<Thread> tasks = new LinkedList<>();
-        List<Point> list = getBounds(this.img.getHeight(), this.countOfTasks);
+        List<Point> list = getBounds(this.inImage.getHeight(), this.countOfTasks);
         list.forEach(el -> tasks.add(new Thread("thread #" + tasks.size()) {
             public void run() {
                 Data tmp = new Data();
-                LOG.debug("start thread " + el.x + " " + el.y + " " + img.getWidth());
-                for (int i = 0; i < img.getWidth(); i++) {
-                    for (int j = el.x - 1; j < el.y; j++) {
-                        out.setRGB(i, j, tmp.getGray(img.getRGB(i, j)));
-                    }
+                LOG.debug("start thread " + el.x + " " + el.y + " " + inImage.getWidth());
+                for (int j = el.x - 1; j < el.y; j++) {
+                    datas[j] = tmp.getGray(datas[j]);
                 }
                 LOG.debug("finished thread!");
             }
@@ -77,4 +77,7 @@ public class Clerk {
         return list;
     }
 
+    public int[] getDatas() {
+        return datas;
+    }
 }

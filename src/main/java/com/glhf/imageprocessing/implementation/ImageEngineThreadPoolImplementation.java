@@ -80,16 +80,15 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
     @Override
     public void convert() {
         Clerk clerk = new Clerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors());
-
         ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         clerk.getTaskList().forEach(el -> exe.execute(el));
-
         exe.shutdown();
         try {
             exe.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
             LOG.info(e);
         }
+        outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getDatas(), 0, inImage.getWidth());
 
     }
 
