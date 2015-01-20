@@ -42,7 +42,7 @@ public class AppTest {
     @Test
     public void testForkJoinImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngineForkJoinImplementation eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "join", OutputType.BMP);
+        ImageEngineForkJoinImplementation eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "join", OutputType.PNG);
         eng.read();
         long start = System.currentTimeMillis();
         eng.convert();
