@@ -8,7 +8,7 @@ import java.awt.*;
  * Element that using for pixels processing with filters that
  * implements processing in which every single output pixel depends
  * only from appropriate input pixel.
- * <p/>
+ *
  * Implements OnePixelDependFilter
  *
  * @author goodvin Mykola Polonskyi
@@ -27,8 +27,6 @@ import java.awt.*;
  */
 public class GrayscaleFilterElemet implements OnePixelDependFilter {
 
-    private int x = 0;
-    private int y = 0;
     private int color;
     private double rCoefficient = 0.299;
     private double gCoefficient = 0.587;
