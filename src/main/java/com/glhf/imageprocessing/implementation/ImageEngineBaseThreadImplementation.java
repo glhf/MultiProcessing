@@ -25,7 +25,7 @@ public class ImageEngineBaseThreadImplementation implements ImageEngine {
 
     private String inputPath;
     private String outputPath;
-    private OutputType outputType = OutputType.JPG;
+    private OutputType outputType = OutputType.PNG;
     private BufferedImage inImage;
     private BufferedImage outImage;
     private OnePixelDependFilter filter;

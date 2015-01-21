@@ -33,7 +33,7 @@ public class NonThreadClerk implements Clerkable {
         GrayscaleFilterElemet tmp = new GrayscaleFilterElemet();
         for (int i = 0; i < inImage.getWidth(); i++) {
             for (int j = 0; j < inImage.getHeight(); j++) {
-                outImage.setRGB(i, j, tmp.processing(inImage.getRGB(i, j)));
+                pixelsArray[i + (j * inImage.getWidth())] = tmp.processing(pixelsArray[i + (j * inImage.getWidth())]);
             }
         }
     }

@@ -30,7 +30,7 @@ public class ImageEngineThreadPoolImplementation implements ImageEngine {
 
     private String outputPath;
     private String inputPath;
-    private OutputType outputType = OutputType.JPG;
+    private OutputType outputType = OutputType.PNG;
     private BufferedImage inImage;
     private BufferedImage outImage;
     private OnePixelDependFilter filter;
