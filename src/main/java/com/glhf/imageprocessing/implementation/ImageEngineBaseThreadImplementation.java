@@ -51,7 +51,7 @@ public class ImageEngineBaseThreadImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(path);
             this.inImage = ImageIO.read(pathURL);
-            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
         } catch (IOException e) {

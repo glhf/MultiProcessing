@@ -125,7 +125,6 @@ public class BaseThreadClerk implements Clerkable {
         @Override
         public void run() {
             LOG.debug("start thread " + bounds.getStart() + " " + bounds.getEnd());
-
             for (int j = bounds.getStart() - 1; j < bounds.getEnd(); j++) {
                 pixelsArray[j] = filter.processing(pixelsArray[j]);//
             }

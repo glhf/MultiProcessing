@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
@@ -55,7 +56,7 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
         try {
             URL pathURL = new URL(path);
             this.inImage = ImageIO.read(pathURL);
-            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+            this.outImage = new BufferedImage(this.inImage.getWidth(), this.inImage.getHeight(), BufferedImage.TYPE_INT_RGB);
         } catch (MalformedInputException e) {
             LOG.error("Invalid path!", e);
         } catch (IOException e) {

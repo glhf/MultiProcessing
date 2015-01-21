@@ -21,45 +21,61 @@ public class AppTest {
 
     @Test
     public void testBaseImoplementation() {
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("png-img.png");
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
         ImageEngine eng = new ImageEngineBaseThreadImplementation(inputFullPath.toString(), "1base", OutputType.PNG, new GrayscaleFilterElemet());
         eng.read();
-        long start = System.currentTimeMillis();
-        eng.convert();
-        System.out.println("Base " + ((System.currentTimeMillis() - start)));
+        long times = 0;
+        for (int i = 0; i < 15; i++) {
+            long start = System.currentTimeMillis();
+            eng.convert();
+            times += (System.currentTimeMillis() - start);
+        }
+        System.out.println("Base = " + times / 15);
         eng.write();
     }
 
     @Test
     public void testPoolImoplementation() {
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("png-img.png");
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
         ImageEngine eng = new ImageEngineThreadPoolImplementation(inputFullPath.toString(), "1pool", OutputType.PNG, new GrayscaleFilterElemet());
         eng.read();
-        long start = System.currentTimeMillis();
-        eng.convert();
-        System.out.println("Pool " + ((System.currentTimeMillis() - start)));
+        long times = 0;
+        for (int i = 0; i < 15; i++) {
+            long start = System.currentTimeMillis();
+            eng.convert();
+            times += (System.currentTimeMillis() - start);
+        }
+        System.out.println("TPE = " + times / 15);
         eng.write();
     }
 
     @Test
     public void testForkJoinImoplementation() {
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("png-img.png");
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
         ImageEngine eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "1join", OutputType.PNG, new GrayscaleFilterElemet());
         eng.read();
-        long start = System.currentTimeMillis();
-        eng.convert();
-        System.out.println("Fork/Join " + ((System.currentTimeMillis() - start)));
+        long times = 0;
+        for (int i = 0; i < 15; i++) {
+            long start = System.currentTimeMillis();
+            eng.convert();
+            times += (System.currentTimeMillis() - start);
+        }
+        System.out.println("FORK JOIN = " + times / 15);
         eng.write();
     }
 
     @Test
     public void testNonThreadImplementation() {
-        URL inputFullPath = AppTest.class.getClassLoader().getResource("png-img.png");
+        URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
         ImageEngine eng = new NonThreadImplementation(inputFullPath.toString(), "1momthread", OutputType.PNG);
         eng.read();
-        long start = System.currentTimeMillis();
-        eng.convert();
-        System.out.println("Nonthread " + ((System.currentTimeMillis() - start)));
+        long times = 0;
+        for (int i = 0; i < 15; i++) {
+            long start = System.currentTimeMillis();
+            eng.convert();
+            times += (System.currentTimeMillis() - start);
+        }
+        System.out.println("NON thread = " + times / 15);
         eng.write();
     }
 }
