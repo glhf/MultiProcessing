@@ -1,9 +1,8 @@
-package com.glhf.imageprocessing.clerks;
+package com.glhf.imageprocessing.processing.nondepend.clerks;
 
-import com.glhf.imageprocessing.entity.Bounds;
-import com.glhf.imageprocessing.entity.filters.GrayscaleFilterElemet;
-import com.glhf.imageprocessing.interfaces.Clerkable;
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
+import com.glhf.imageprocessing.processing.nondepend.entity.Bounds;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.Clerkable;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

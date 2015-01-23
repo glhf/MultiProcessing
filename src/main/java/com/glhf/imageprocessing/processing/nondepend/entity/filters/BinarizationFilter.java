@@ -1,6 +1,6 @@
-package com.glhf.imageprocessing.entity.filters;
+package com.glhf.imageprocessing.processing.nondepend.entity.filters;
 
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.OnePixelDependFilter;
 
 import java.awt.*;
 
@@ -19,7 +19,7 @@ public class BinarizationFilter implements OnePixelDependFilter {
     private double gCoefficient = 0.587;
     private double bCoefficient = 0.114;
     private int rgbColor = 0;
-    private double threshold = 0.2;
+    private double threshold = 0.22;
     private int rgbResultColor = 0;
 
     public BinarizationFilter() {

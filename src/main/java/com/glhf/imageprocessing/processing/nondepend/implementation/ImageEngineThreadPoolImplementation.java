@@ -1,10 +1,10 @@
-package com.glhf.imageprocessing.implementation;
+package com.glhf.imageprocessing.processing.nondepend.implementation;
 
-import com.glhf.imageprocessing.clerks.ThreadPoolClerk;
-import com.glhf.imageprocessing.entity.OutputType;
-import com.glhf.imageprocessing.interfaces.Clerkable;
-import com.glhf.imageprocessing.interfaces.ImageEngine;
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
+import com.glhf.imageprocessing.processing.nondepend.clerks.ThreadPoolClerk;
+import com.glhf.imageprocessing.processing.nondepend.entity.OutputType;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.Clerkable;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.ImageEngine;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

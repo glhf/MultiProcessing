@@ -1,15 +1,15 @@
 package com.glhf.imageprocessing;
 
-import com.glhf.imageprocessing.entity.OutputType;
-import com.glhf.imageprocessing.entity.filters.BinarizationFilter;
-import com.glhf.imageprocessing.entity.filters.GrayscaleFilterElemet;
-import com.glhf.imageprocessing.implementation.ImageEngineBaseThreadImplementation;
+import com.glhf.imageprocessing.processing.nondepend.entity.OutputType;
+import com.glhf.imageprocessing.processing.nondepend.entity.filters.BinarizationFilter;
+import com.glhf.imageprocessing.processing.nondepend.entity.filters.GrayscaleFilterElemet;
+import com.glhf.imageprocessing.processing.nondepend.implementation.ImageEngineBaseThreadImplementation;
 
-import com.glhf.imageprocessing.implementation.ImageEngineForkJoinImplementation;
-import com.glhf.imageprocessing.implementation.ImageEngineThreadPoolImplementation;
+import com.glhf.imageprocessing.processing.nondepend.implementation.ImageEngineForkJoinImplementation;
+import com.glhf.imageprocessing.processing.nondepend.implementation.ImageEngineThreadPoolImplementation;
 
-import com.glhf.imageprocessing.implementation.NonThreadImplementation;
-import com.glhf.imageprocessing.interfaces.ImageEngine;
+import com.glhf.imageprocessing.processing.nondepend.implementation.NonThreadImplementation;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.ImageEngine;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,6 +18,7 @@ import java.net.URL;
 /**
  * Unit test for simple App.
  */
+@Ignore
 public class AppTest {
     @Ignore
     @Test

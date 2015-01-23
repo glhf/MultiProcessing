@@ -1,4 +1,4 @@
-package com.glhf.imageprocessing.interfaces;
+package com.glhf.imageprocessing.processing.nondepend.interfaces;
 
 /**
  * Created by
@@ -20,7 +20,7 @@ public interface OnePixelDependFilter {
 
     /**
      * Default processing method
-     * Need to be override for each filter subclass
+     * Need to be overrided for each filter subclass
      */
     default int processing(int color) {
         return color;

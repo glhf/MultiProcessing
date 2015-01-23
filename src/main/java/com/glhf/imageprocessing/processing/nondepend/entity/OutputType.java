@@ -1,4 +1,4 @@
-package com.glhf.imageprocessing.entity;
+package com.glhf.imageprocessing.processing.nondepend.entity;
 
 /**
  * Created by

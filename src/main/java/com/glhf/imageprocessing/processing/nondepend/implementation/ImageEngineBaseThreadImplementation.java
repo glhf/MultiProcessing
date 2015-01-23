@@ -1,16 +1,15 @@
-package com.glhf.imageprocessing.implementation;
+package com.glhf.imageprocessing.processing.nondepend.implementation;
 
-import com.glhf.imageprocessing.clerks.ForkJoinClerk;
-import com.glhf.imageprocessing.entity.OutputType;
-import com.glhf.imageprocessing.interfaces.Clerkable;
-import com.glhf.imageprocessing.interfaces.ImageEngine;
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
+import com.glhf.imageprocessing.processing.nondepend.clerks.ThreadPoolClerk;
+import com.glhf.imageprocessing.processing.nondepend.entity.OutputType;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.Clerkable;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.ImageEngine;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.OnePixelDependFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
@@ -18,14 +17,9 @@ import java.nio.charset.MalformedInputException;
 /**
  * Convert file with input image-file with path as argument
  * to gray scale image file
- * Implementation multhitreading with Fork/Join framework
- *
- * @author goodvin Mykola Polonskyi
- *         on 16.01.15
- *         github.com/glhf
- *         goodvin4@gmail.com
+ * Implementation multithreading with base thread functions
  */
-public class ImageEngineForkJoinImplementation implements ImageEngine {
+public class ImageEngineBaseThreadImplementation implements ImageEngine {
     private static final Logger LOG = LogManager.getLogger(ImageEngineBaseThreadImplementation.class);
 
     private String inputPath;
@@ -35,16 +29,16 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
     private BufferedImage outImage;
     private OnePixelDependFilter filter;
 
-    public ImageEngineForkJoinImplementation() {
+    public ImageEngineBaseThreadImplementation() {
     }
 
-    public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OnePixelDependFilter filter) {
+    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.filter = filter;
     }
 
-    public ImageEngineForkJoinImplementation(String inputPath, String outputPath, OutputType type, OnePixelDependFilter filter) {
+    public ImageEngineBaseThreadImplementation(String inputPath, String outputPath, OutputType type, OnePixelDependFilter filter) {
         this.inputPath = inputPath;
         this.outputPath = outputPath;
         this.outputType = type;
@@ -71,15 +65,16 @@ public class ImageEngineForkJoinImplementation implements ImageEngine {
 
     @Override
     public void convert() {
-        Clerkable clerk = new ForkJoinClerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors(), filter);
+        Clerkable clerk = new ThreadPoolClerk(this.inImage, this.outImage, Runtime.getRuntime().availableProcessors(), filter);
         clerk.computeImage();
         this.outImage.setRGB(0, 0, inImage.getWidth(), inImage.getHeight(), clerk.getPixelsArray(), 0, inImage.getWidth());
+        LOG.debug("wait main fin");
     }
 
     @Override
     public void write() {
         try {
-            File output = new File(new StringBuffer().append(this.outputPath).append("FKJN.").append(outputType.toString()).toString());
+            File output = new File(new StringBuffer().append(this.outputPath).append("BASE.").append(outputType.toString()).toString());
             LOG.debug(output.getAbsolutePath());
             ImageIO.write(this.outImage, outputType.toString(), output);
         } catch (IOException e) {

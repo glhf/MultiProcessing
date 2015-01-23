@@ -1,4 +1,4 @@
-package com.glhf.imageprocessing.interfaces;
+package com.glhf.imageprocessing.processing.nondepend.interfaces;
 
 /**
  * @author Mykola Polonskyi

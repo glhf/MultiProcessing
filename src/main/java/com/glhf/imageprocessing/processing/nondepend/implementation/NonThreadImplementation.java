@@ -1,8 +1,8 @@
-package com.glhf.imageprocessing.implementation;
+package com.glhf.imageprocessing.processing.nondepend.implementation;
 
-import com.glhf.imageprocessing.clerks.NonThreadClerk;
-import com.glhf.imageprocessing.entity.OutputType;
-import com.glhf.imageprocessing.interfaces.ImageEngine;
+import com.glhf.imageprocessing.processing.nondepend.clerks.NonThreadClerk;
+import com.glhf.imageprocessing.processing.nondepend.entity.OutputType;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.ImageEngine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

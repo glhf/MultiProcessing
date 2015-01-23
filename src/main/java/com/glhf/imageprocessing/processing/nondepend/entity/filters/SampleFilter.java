@@ -1,6 +1,6 @@
-package com.glhf.imageprocessing.entity.filters;
+package com.glhf.imageprocessing.processing.nondepend.entity.filters;
 
-import com.glhf.imageprocessing.interfaces.OnePixelDependFilter;
+import com.glhf.imageprocessing.processing.nondepend.interfaces.OnePixelDependFilter;
 
 /**
  * Created by
