@@ -1,6 +1,7 @@
 package com.glhf.imageprocessing;
 
-import com.glhf.imageprocessing.gui.swing.MainStage;
+import com.glhf.imageprocessing.gui.swing.MainStageView;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -11,8 +12,9 @@ import org.junit.Test;
  */
 public class GUITest {
 
+    @Ignore
     @Test
     public void mainStageTest() {
-        ((Runnable) () -> new MainStage().setVisible(true)).run();
+        ((Runnable) () -> new MainStageView().setVisible(true)).run();
     }
 }

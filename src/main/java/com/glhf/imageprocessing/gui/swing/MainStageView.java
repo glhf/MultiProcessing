@@ -1,50 +1,71 @@
 package com.glhf.imageprocessing.gui.swing;
 
+import com.glhf.imageprocessing.settings.Settings;
+import com.glhf.imageprocessing.settings.SettingsFactory;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import java.awt.image.BufferedImageFilter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.management.PlatformLoggingMXBean;
 
 import javax.imageio.ImageIO;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBException;
 
 
 /**
+ * Class implements features of MVC view part
+ * Displaying data, user actions handling
  *
-
+ * @author Mykola Polonskyi
+ *         on 27.01.15
+ *         github.com/glhf
+ *         goodvin4@gmail.com
  */
-public class MainStage extends javax.swing.JFrame {
-    private javax.swing.JMenuItem exitMenu;
+public class MainStageView extends javax.swing.JFrame {
+    private static final Logger LOG = LogManager.getLogger(MainStageView.class);
+
+    private ImageUpdater updater = new ImageUpdater();
+
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JMenu FileMenuItem;
     private javax.swing.JMenuItem openMenu;
     private javax.swing.JMenuItem saveAsMenu;
     private javax.swing.JMenuItem saveMenu;
+    private javax.swing.JMenuItem exitMenu;
 
     private StatusBar statusBar;
-
+    private PluginsBar pluginBar;
     private ImageView imageView = new ImageView();
 
-    public MainStage() {
+    private Settings settings;
+
+    public MainStageView() {
         initComponents();
     }
 
     private void initComponents() {
+
+        try {
+            settings = SettingsFactory.loadSettings("settings.xml");
+        } catch (IOException e) {
+            LOG.error("Load settings IO exception", e);
+        } catch (JAXBException e) {
+            LOG.error("Load settings JAXB exception", e);
+        }
+
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -89,11 +110,17 @@ public class MainStage extends javax.swing.JFrame {
         //end
 
         //creating plugin panel
-        JPanel pluginListContainer = new JPanel();
-        pluginListContainer.setBackground(Color.blue);
-        pluginListContainer.setPreferredSize(new Dimension((int) (this.getWidth() * .25), this.getHeight()));
-        add(pluginListContainer, BorderLayout.WEST);
+        pluginBar = new PluginsBar(this.updater);
+        pluginBar.setPreferredSize(new Dimension((int) (this.getWidth() * .3), this.getHeight()));
+        add(pluginBar, BorderLayout.WEST);
         //end
+
+
+        //creating status bar
+        statusBar = new StatusBar();
+        statusBar.setPreferredSize(new Dimension(this.getWidth(), (int) (this.getHeight() * .05)));
+        add(statusBar, BorderLayout.SOUTH);
+        //eng
 
         //creating viewImageBlock
         JFXPanel imageViewContainer = new JFXPanel();
@@ -106,15 +133,15 @@ public class MainStage extends javax.swing.JFrame {
         });
         //end
 
-        //creating status bar
-        statusBar = new StatusBar();
-        statusBar.setPreferredSize(new Dimension(this.getWidth(), (int) (this.getHeight() * .05)));
-        add(statusBar, BorderLayout.SOUTH);
-        //eng
-
         pack();
     }
 
+    /**
+     * Initialization swing-container for javafx ImageView class
+     *
+     * @param fxPanel
+     * @param imageView
+     */
     private void initFX(JFXPanel fxPanel, ImageView imageView) {
         //initialization of fx elements
         Scene scene = createScene(imageView);
@@ -123,6 +150,11 @@ public class MainStage extends javax.swing.JFrame {
         fxPanel.setScene(scene);
     }
 
+    /**
+     * Initialization FX-container for javafx ImageView clas
+     * @param imageView
+     * @return
+     */
     private Scene createScene(ImageView imageView) {
         Group root = new Group();
         Scene scene = new Scene(root);
@@ -143,42 +175,68 @@ public class MainStage extends javax.swing.JFrame {
         return scene;
     }
 
-    void setImageOnSwingAppFrame(BufferedImage img) {
+    /**
+     * Method for set images into javafx imageView
+     *
+     * @param img
+     */
+    public void setImageToFXContainer(BufferedImage img) {
         this.statusBar.setImageStatusInfo(img);
         ImageView imageOnSwingAppFrame = this.imageView;
         Platform.runLater(() -> imageOnSwingAppFrame.setImage(SwingFXUtils.toFXImage(img, null)));
     }
 
-    private void setImageStatusInfo(BufferedImage img) {
-        // TODO create method that will be show information about loading image
-    }
-
-    private void setAlgorythmInvokeInformation() {
-        // TODO create method that will be show information about algorythm execution
-    }
 
     private void openMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        // Load image 
+        // Load image
         try {
             JFileChooser fileopen = new JFileChooser();
             fileopen.showOpenDialog(this);
-            BufferedImage img = ImageIO.read(new File(fileopen.getSelectedFile().getAbsolutePath()));
-            setImageOnSwingAppFrame(img);
+            updater.set(ImageIO.read(new File(fileopen.getSelectedFile().getAbsolutePath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        // TODO add your handling code here: Controller Call for save image
     }
 
     private void saveAsMenuActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        // save image
+        try {
+            JFileChooser fileopen = new JFileChooser();
+            fileopen.showSaveDialog(this);
+            ImageIO.write(updater.get(), "png", new File(fileopen.getSelectedFile().getAbsolutePath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void exitMenuActionPerformed(java.awt.event.ActionEvent evt) {
         this.dispose();
         System.exit(0);
+    }
+
+    public class ImageUpdater {
+        BufferedImage img;
+
+        ImageUpdater() {
+
+        }
+
+        ImageUpdater(BufferedImage img) {
+            this.img = img;
+        }
+
+        public BufferedImage get() {
+            return this.img;
+        }
+
+        public void set(BufferedImage img) {
+            this.img = img;
+            setImageToFXContainer(this.img);
+        }
+
     }
 }

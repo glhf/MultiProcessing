@@ -28,13 +28,18 @@ public class StatusBar extends JPanel {
     private JLabel titleEndMillisecondTime;
     private JLabel titleTime;
 
-
+    /**
+     * base constructor with left align of text information
+     */
     public StatusBar() {
         FlowLayout l = new FlowLayout(FlowLayout.LEFT);
         setLayout(l);
         initComponents();
     }
 
+    /**
+     * Init status bar base information
+     */
     private void initComponents() {
         titleHeight = new JLabel("H:");
         titleWigtht = new JLabel("W:");
@@ -68,6 +73,11 @@ public class StatusBar extends JPanel {
         this.add(time);
     }
 
+    /**
+     * Set information about buffered image into status bar
+     *
+     * @param img
+     */
     public void setImageStatusInfo(BufferedImage img) {
         height.setText(String.valueOf(img.getHeight()));
         wigtht.setText(String.valueOf(img.getWidth()));
@@ -77,8 +87,15 @@ public class StatusBar extends JPanel {
         // set ALG data to default/empty
         startMillisecondTime.setText("0");
         endMillisecondTime.setText("0");
+        time.setText("0");
     }
 
+    /**
+     * set information about image processing algorithm work time
+     * @param s
+     * @param e
+     * @param d
+     */
     public void setAlgorithmWorkInfo(int s, int e, int d) {
         startMillisecondTime.setText("11");
         endMillisecondTime.setText("");
