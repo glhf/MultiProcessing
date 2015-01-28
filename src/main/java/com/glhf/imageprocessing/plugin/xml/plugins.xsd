@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:imp="http://www.github.com/glhf/plugins"
+            targetNamespace="http://www.github.com/glhf/plugins">
+
+    <xsd:element name="plugins">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="plugin" type="imp:pluginType" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <xsd:complexType name="pluginType">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="accessClassName" type="xsd:string"/>
+            <xsd:element name="panelClassName" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
