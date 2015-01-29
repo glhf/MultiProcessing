@@ -12,7 +12,7 @@ import java.awt.*;
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public class BinarizationFilter implements OnePixelDependFilter {
+public class BinarizationFilterElement implements OnePixelDependFilter {
     final Color black = Color.BLACK;
     final Color white = Color.WHITE;
     private double rCoefficient = 0.299;
@@ -22,18 +22,18 @@ public class BinarizationFilter implements OnePixelDependFilter {
     private double threshold = 0.22;
     private int rgbResultColor = 0;
 
-    public BinarizationFilter() {
+    public BinarizationFilterElement() {
     }
 
-    public BinarizationFilter(int rgbColor) {
+    public BinarizationFilterElement(int rgbColor) {
         this.rgbColor = rgbColor;
     }
 
-    public BinarizationFilter(double THRESHOLD) {
+    public BinarizationFilterElement(double THRESHOLD) {
         this.threshold = THRESHOLD;
     }
 
-    public BinarizationFilter(int rgbColor, double THRESHOLD) {
+    public BinarizationFilterElement(int rgbColor, double THRESHOLD) {
         this.rgbColor = rgbColor;
         this.threshold = THRESHOLD;
     }

@@ -1,6 +1,8 @@
 package com.glhf.imageprocessing.plugin.example;
 
 import com.glhf.imageprocessing.plugin.api.ImageProcessor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,7 +16,8 @@ import java.util.Map;
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public class BinarizationFilter implements ImageProcessor {
+public class BinarizationFilterOld implements ImageProcessor {
+    private final static Logger LOG = LogManager.getLogger(BinarizationFilterOld.class);
     final Color black = Color.BLACK;
     final Color white = Color.WHITE;
     private double rCoefficient = 0.299;
@@ -23,7 +26,7 @@ public class BinarizationFilter implements ImageProcessor {
 
     private double threshold = 0.22;
 
-    public BinarizationFilter() {
+    public BinarizationFilterOld() {
 
     }
 
@@ -39,6 +42,7 @@ public class BinarizationFilter implements ImageProcessor {
 
     @Override
     public BufferedImage process(BufferedImage in) {
+        LOG.info("Threshold = " + threshold);
         BufferedImage out = new BufferedImage(in.getWidth(), in.getHeight(), in.getType());
         for (int i = 0; i < in.getWidth(); i++) {
             for (int j = 0; j < in.getHeight(); j++) {

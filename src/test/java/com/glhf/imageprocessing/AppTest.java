@@ -1,7 +1,7 @@
 package com.glhf.imageprocessing;
 
 import com.glhf.imageprocessing.processing.nondepend.entity.OutputType;
-import com.glhf.imageprocessing.processing.nondepend.entity.filters.BinarizationFilter;
+import com.glhf.imageprocessing.processing.nondepend.entity.filters.BinarizationFilterElement;
 import com.glhf.imageprocessing.processing.nondepend.entity.filters.GrayscaleFilterElemet;
 import com.glhf.imageprocessing.processing.nondepend.implementation.ImageEngineBaseThreadImplementation;
 
@@ -55,7 +55,7 @@ public class AppTest {
     @Test
     public void testForkJoinImoplementation() {
         URL inputFullPath = AppTest.class.getClassLoader().getResource("bmp-img.bmp");
-        ImageEngine eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "111join", OutputType.PNG, new BinarizationFilter());
+        ImageEngine eng = new ImageEngineForkJoinImplementation(inputFullPath.toString(), "111join", OutputType.PNG, new BinarizationFilterElement());
         eng.read();
         long times = 0;
         // for (int i = 0; i < 15; i++) {

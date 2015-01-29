@@ -2,6 +2,8 @@ package com.glhf.imageprocessing.plugin.example;
 
 import com.glhf.imageprocessing.plugin.api.ConfigObserver;
 import com.glhf.imageprocessing.plugin.api.ImageProcessorConfigObservable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -15,7 +17,9 @@ import java.util.Map;
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public class GrayscalePanel extends JPanel implements ImageProcessorConfigObservable {
+public class GrayscalePanelOld extends JPanel implements ImageProcessorConfigObservable {
+    private final static Logger LOG = LogManager.getLogger(GrayscalePanelOld.class);
+
     private List<ConfigObserver> observerList = new LinkedList<>();
     private JLabel rCoefficientLabel = new JLabel("Red Coefficient: ");
     private JLabel gCoefficientLabel = new JLabel("Green Coefficient: ");
@@ -24,7 +28,7 @@ public class GrayscalePanel extends JPanel implements ImageProcessorConfigObserv
     private JTextField gCoefficient = new JTextField("0.587");
     private JTextField bCoefficient = new JTextField("0.114");
 
-    public GrayscalePanel() {
+    public GrayscalePanelOld() {
         JPanel rPanel = new JPanel();
         rPanel.add(rCoefficientLabel);
         rPanel.add(rCoefficient);
@@ -55,6 +59,7 @@ public class GrayscalePanel extends JPanel implements ImageProcessorConfigObserv
     }
 
     private Map<String, String> getParameters() {
+        LOG.info("send update r = " + rCoefficient + "g = " + gCoefficient + "b = " + bCoefficient);
         Map<String, String> map = new HashMap<String, String>();
         map.put("rCoefficient", rCoefficient.getText().toString());
         map.put("gCoefficient", gCoefficient.getText().toString());

@@ -56,16 +56,16 @@ public class MainStageView extends javax.swing.JFrame {
         initComponents();
     }
 
-    private void initComponents() {
-
-        try {
-            settings = SettingsFactory.loadSettings("settings.xml");
-        } catch (IOException e) {
-            LOG.error("Load settings IO exception", e);
-        } catch (JAXBException e) {
-            LOG.error("Load settings JAXB exception", e);
+    public MainStageView(Settings settings) {
+        if (settings == null) {
+            LOG.error("No input settings!");
+        } else {
+            this.settings = settings;
         }
+        initComponents();
+    }
 
+    private void initComponents() {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
         imageView.setCache(true);
@@ -105,12 +105,11 @@ public class MainStageView extends javax.swing.JFrame {
         FileMenuItem.add(exitMenu);
 
         mainMenuBar.add(FileMenuItem);
-
         setJMenuBar(mainMenuBar);
         //end
 
         //creating plugin panel
-        pluginBar = new PluginsBar(this.updater);
+        pluginBar = new PluginsBar(this.updater, this.settings.getPluginsDirectory());
         pluginBar.setPreferredSize(new Dimension((int) (this.getWidth() * .3), this.getHeight()));
         add(pluginBar, BorderLayout.WEST);
         //end
@@ -136,6 +135,7 @@ public class MainStageView extends javax.swing.JFrame {
         pack();
     }
 
+    //FXcontainer functions block
     /**
      * Initialization swing-container for javafx ImageView class
      *
@@ -185,7 +185,7 @@ public class MainStageView extends javax.swing.JFrame {
         ImageView imageOnSwingAppFrame = this.imageView;
         Platform.runLater(() -> imageOnSwingAppFrame.setImage(SwingFXUtils.toFXImage(img, null)));
     }
-
+    //end of FXcontainer functions block
 
     private void openMenuActionPerformed(java.awt.event.ActionEvent evt) {
         // Load image
@@ -218,6 +218,10 @@ public class MainStageView extends javax.swing.JFrame {
         System.exit(0);
     }
 
+    /**
+     * container class for Buffered image that would process in system
+     * and it FXcontainer
+     */
     public class ImageUpdater {
         BufferedImage img;
 

@@ -15,18 +15,18 @@ import java.util.Map;
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public class BinarizationPanel extends JPanel implements ImageProcessorConfigObservable {
+public class BinarizationPanelOld extends JPanel implements ImageProcessorConfigObservable {
     private List<ConfigObserver> observerList = new LinkedList<>();
     private JLabel thresholdLabel = new JLabel("Threshold: ");
     private JTextField threshold = new JTextField();
 
-    public BinarizationPanel() {
+    public BinarizationPanelOld() {
         initComponents();
     }
 
     private void initComponents() {
         add(thresholdLabel);
-        threshold.setText("double value");
+        threshold.setText("0.4");
         threshold.addActionListener(el -> notifyObservers());
         add(threshold);
     }
